@@ -48,6 +48,7 @@ public class ItemInfoActivity extends AppCompatActivity implements ItemInfoContr
     Switch aSwitch;
     //-----------------------
     private Movie movie;
+    private Boolean newCheckState = null;
 
 
 
@@ -112,26 +113,37 @@ public class ItemInfoActivity extends AppCompatActivity implements ItemInfoContr
 //----------------Click Switch------------------
     @Override
     public void onClick(View v) {
-        //presenter open + 
-        SQLiteDatabase sql = dataHelper.getWritableDatabase();
         boolean checked = ((Switch) v).isChecked();
-        if (checked) {
-            newCheckState = true;
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(DataBase.MOVIE_ID, movie.getId());
-            contentValues.put(DataBase.TITLE, movie.getTitle());
-            contentValues.put(DataBase.POSTER, movie.getPosterPath());
-            contentValues.put(DataBase.OVERVIEW, movie.getOverview());
-            contentValues.put(DataBase.DATA, movie.getReleaseDate());
-            contentValues.put(DataBase.RATE, movie.getVoteAverage());
-            contentValues.put(DataBase.GENRES, String.valueOf(movie.getGenres()));
-            sql.insert(DataBase.TABLE_NAME, null, contentValues);
-            Toast.makeText(ItemInfoActivity.this, "Added to your collection", Toast.LENGTH_SHORT).show();
-        } else {
-            newCheckState = false;
-            sql.execSQL(DataBase.DEL_NAME + movie.getId());
-            Toast.makeText(ItemInfoActivity.this, "Removed from collection", Toast.LENGTH_SHORT).show();
+        presenter.saveOrDeleteMovie(checked,movie);
+
+    }
+
+    @Override
+    public void setCheckState(boolean checkState) {
+        //тру или фалс
+        newCheckState = checkState;
+    }
+
+    @Override
+    public void doToastAdded() {
+        Toast.makeText(ItemInfoActivity.this, "Added to your collection", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void doToastRemoved() {
+        Toast.makeText(ItemInfoActivity.this, "Removed from collection", Toast.LENGTH_SHORT).show();
+    }
+//-------------------------------------------------------------------------
+
+    //todo как тут быть????
+    @Override
+    public void onBackPressed() {
+        if(newCheckState!=null){
+            if(!newCheckState){
+                setResult(RESULT_OK,new Intent().putExtra("movie",movie));
+
+            }
         }
-        dataHelper.close();
+        super.onBackPressed();
     }
 }

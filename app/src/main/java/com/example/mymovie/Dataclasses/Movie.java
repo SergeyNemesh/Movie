@@ -129,4 +129,6 @@ public class Movie implements Parcelable {
         dest.writeString(overview);
         dest.writeStringList(genres);
     }
+
+
 }

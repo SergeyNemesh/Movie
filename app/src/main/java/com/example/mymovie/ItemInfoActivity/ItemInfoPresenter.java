@@ -1,8 +1,10 @@
 package com.example.mymovie.ItemInfoActivity;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
 
 import com.example.mymovie.DataBase.DataBase;
 import com.example.mymovie.Dataclasses.Movie;
@@ -54,6 +56,28 @@ public class ItemInfoPresenter implements ItemInfoContract.ItemInfoPresenter{
         return idCheck;
 
     }
+//-------------------из СВИТЧА------------------
+    @Override
+    public void saveOrDeleteMovie(boolean checked, Movie movie) {
+        SQLiteDatabase sql = dataHelper.getWritableDatabase();
 
-
+        if (checked) {
+            view.setCheckState(true);
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(DataBase.MOVIE_ID, movie.getId());
+            contentValues.put(DataBase.TITLE, movie.getTitle());
+            contentValues.put(DataBase.POSTER, movie.getPosterPath());
+            contentValues.put(DataBase.OVERVIEW, movie.getOverview());
+            contentValues.put(DataBase.DATA, movie.getReleaseDate());
+            contentValues.put(DataBase.RATE, movie.getVoteAverage());
+            contentValues.put(DataBase.GENRES, String.valueOf(movie.getGenres()));
+            sql.insert(DataBase.TABLE_NAME, null, contentValues);
+            view.doToastAdded();
+        } else {
+            view.setCheckState(false);
+            sql.execSQL(DataBase.DEL_NAME + movie.getId());
+            view.doToastRemoved();
+        }
+        dataHelper.close();
+    }
 }
