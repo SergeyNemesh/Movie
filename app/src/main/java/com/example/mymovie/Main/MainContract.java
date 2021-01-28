@@ -28,5 +28,7 @@ public interface MainContract {
         void loadMoreItems();
 
         boolean booleanIsLoading();
+
+        void setCurrentPage();
     }
 }

@@ -124,5 +124,9 @@ public class MainPresenter implements MainContract.MainPresenter {
 //-------------------------------------------------
       //todo Swiperefresh----------------
 
+    @Override
+    public void setCurrentPage() {
+        currentPage = PAGE_START;
+    }
 }
 

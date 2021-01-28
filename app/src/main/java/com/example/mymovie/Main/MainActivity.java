@@ -88,10 +88,10 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                currentPage = PAGE_START;
+                presenter.setCurrentPage();
                 mAdaptor.clear();
                 swipeRefresh.setRefreshing(true);
-                getMovies();
+                presenter.getMovies();
 
             }
         });
