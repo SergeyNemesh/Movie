@@ -1,43 +1,86 @@
 package com.example.mymovie.ItemInfoActivity;
 
 import android.content.ContentValues;
-import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.widget.Toast;
 
 import com.example.mymovie.DataBase.DataBase;
+import com.example.mymovie.Dataclasses.Constans;
 import com.example.mymovie.Dataclasses.Movie;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemInfoPresenter implements ItemInfoContract.ItemInfoPresenter{
+public class ItemInfoPresenter implements ItemInfoContract.ItemInfoPresenter {
 
-         //todo как создать базу??
-     DataBase dataHelper;
+    private DataBase dataHelper;
+    private Movie movie;
+    //-----тут по другому работает свич
+    private boolean newCheckState = false;
+    private ItemInfoContract.ItemInfoView view;
 
-    //-----------------------------
-
-    ItemInfoContract.ItemInfoView view;
-    ItemInfoPresenter(ItemInfoContract.ItemInfoView view){
-        this.view=view;
-        //this.dataHelper=dataHelper;
+    public ItemInfoPresenter(ItemInfoContract.ItemInfoView view) {
+        this.view = view;
     }
 
-
-    //----------------------
+    @Override
+    public void processIntent(Intent intent) {
+        if (intent != null) {
+            movie = intent.getParcelableExtra("movie");
+        }
+    }
 
     @Override
-    public void setPositionOfSwitchButton(Movie movie) {
+    public void setTextData() {
+        if (movie != null) {
+//todo оператор
+//            String titel = null;
+//            if(movie.getTitle()==null){
+//                titel="";
+//            }else {
+//                titel=movie.getTitle();
+//            }
+//            view.setTitel(titel);
+
+            //     view.setTitle(movie.getTitle() == null ? "" : movie.getTitle());
+            view.setTitle(movie.getTitle() == null ? "" : movie.getTitle());
+            view.setRelease(movie.getReleaseDate() == null ? "" : movie.getReleaseDate());
+            view.setVote(String.valueOf(movie.getVoteAverage()));
+            view.setOverView(movie.getOverview() == null ? "" : movie.getOverview());
+            view.setGenre(movie.getGenres() == null ? "" : movie.getGenres().toString());
+            view.setPoster(Constans.URL_FOR_PICTURE + movie.getPosterPath());
+        }
+    }
+
+    @Override
+    public void createDataBase(DataBase dataBase) {
+        dataHelper = dataBase;
+    }
+
+    @Override
+    public void setPositionOfSwitchButton() {
         List<Integer> titlesToChek = readFromDb();
         for (Integer item : titlesToChek) {
             if (item.equals(movie.getId())) {
                 view.setSwitch();
-
+                //-----тут по другому работает свич
+                newCheckState = true;
+                break;
             }
         }
     }
+    //-----------Intent+Switch--------------------
+
+    @Override
+    public void onBackPressed() {
+        if (!newCheckState) {
+            view.finishActivity(movie);
+        } else {
+            view.finishActivity();
+        }
+    }
+
     public List<Integer> readFromDb() {
         SQLiteDatabase sql = dataHelper.getWritableDatabase();
         List<Integer> idCheck = new ArrayList<>();
@@ -54,15 +97,14 @@ public class ItemInfoPresenter implements ItemInfoContract.ItemInfoPresenter{
             cursor.close();
         dataHelper.close();
         return idCheck;
-
     }
-//-------------------из СВИТЧА------------------
-    @Override
-    public void saveOrDeleteMovie(boolean checked, Movie movie) {
-        SQLiteDatabase sql = dataHelper.getWritableDatabase();
 
-        if (checked) {
-            view.setCheckState(true);
+    //-------------------из СВИТЧА------------------
+    @Override
+    public void saveOrDeleteMovie(boolean save) {
+        SQLiteDatabase sql = dataHelper.getWritableDatabase();
+        if (save) {
+            newCheckState = true;
             ContentValues contentValues = new ContentValues();
             contentValues.put(DataBase.MOVIE_ID, movie.getId());
             contentValues.put(DataBase.TITLE, movie.getTitle());
@@ -74,7 +116,7 @@ public class ItemInfoPresenter implements ItemInfoContract.ItemInfoPresenter{
             sql.insert(DataBase.TABLE_NAME, null, contentValues);
             view.doToastAdded();
         } else {
-            view.setCheckState(false);
+            newCheckState = false;
             sql.execSQL(DataBase.DEL_NAME + movie.getId());
             view.doToastRemoved();
         }

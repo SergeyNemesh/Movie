@@ -1,23 +1,50 @@
 package com.example.mymovie.ItemInfoActivity;
 
+import android.content.Intent;
+
+import com.example.mymovie.DataBase.DataBase;
 import com.example.mymovie.Dataclasses.Movie;
 
 public interface ItemInfoContract {
 
-    interface  ItemInfoView{
+    interface ItemInfoView {
 
         void setSwitch();
-
-        void setCheckState(boolean checkState);
 
         void doToastAdded();
 
         void doToastRemoved();
+
+        void setTitle(String title);
+
+        void setRelease(String releaseDate);
+
+        void setVote(String vote);
+
+        void setOverView(String overView);
+
+        void setGenre(String genre);
+
+        void setPoster(String posterPath);
+
+        void finishActivity(Movie movie);
+
+        void finishActivity();
     }
-    interface ItemInfoPresenter{
 
-        void setPositionOfSwitchButton(Movie movie);
+    interface ItemInfoPresenter {
 
-        void saveOrDeleteMovie(boolean checked, Movie movie);
+        void setPositionOfSwitchButton();
+
+        void saveOrDeleteMovie(boolean save);
+
+        void createDataBase(DataBase dataBase);
+
+        void processIntent(Intent intent);
+
+        void setTextData();
+
+        void onBackPressed();
+
     }
 }

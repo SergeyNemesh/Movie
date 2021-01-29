@@ -1,19 +1,16 @@
 package com.example.mymovie.ItemInfoActivity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
 import com.example.mymovie.DataBase.DataBase;
@@ -22,106 +19,109 @@ import com.example.mymovie.Dataclasses.Movie;
 import com.example.mymovie.ItemInfoActivity.DialogInfo.Dialog;
 import com.example.mymovie.R;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
-public class ItemInfoActivity extends AppCompatActivity implements ItemInfoContract.ItemInfoView,Dialog.OnTrailerClick, View.OnClickListener {
-    //-----------------------
+public class ItemInfoActivity extends AppCompatActivity implements ItemInfoContract.ItemInfoView {
+
     @BindView(R.id.tv_info_title)
-    TextView title;
+    TextView tvTitle;
     @BindView(R.id.tv_info_overview)
-    TextView overview;
+    TextView tvOverview;
     @BindView(R.id.tv_info_vote)
-    TextView vote;
+    TextView tvVote;
     @BindView(R.id.tv_info_release)
-    TextView release;
+    TextView tvRelease;
     @BindView(R.id.tv_info_ganre)
-    TextView genre;
+    TextView tvGenre;
     @BindView(R.id.image_info)
-    ImageView poster;
+    ImageView ivPoster;
     @BindView(R.id.btn_trailler)
-    Button button_trailer;
+    Button btnTrailer;
     @BindView(R.id.sw_collection)
-    Switch aSwitch;
-    //-----------------------
-    private Movie movie;
-    private Boolean newCheckState = null;
+    Switch swSaveMovie;
 
-
-
-
-    //----------------------
     ItemInfoContract.ItemInfoPresenter presenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_info);
         ButterKnife.bind(this);
         presenter = new ItemInfoPresenter(this);
-        aSwitch.setOnClickListener(this);
+        presenter.createDataBase(new DataBase(this));
 
-        FragmentManager manager = getSupportFragmentManager();
-        Dialog myDialogFragment = new Dialog(this);
 //-----------------------------------------------------------------------
-        Intent intent = getIntent();
-        movie = intent.getParcelableExtra("movie");
-
-        title.setText(movie.getTitle());
-        release.setText(getString(R.string.release_date, movie.getReleaseDate()));
-        vote.setText(getString(R.string.vote_rate, String.valueOf(movie.getVoteAverage())));
-        overview.setText(movie.getOverview());
-        genre.setText(movie.getGenres().toString());
-        Glide.with(this)
-                .load(Constans.URL_FOR_PICTURE + movie.getPosterPath())
-                .into(poster);
-
-
-
-
+        presenter.processIntent(getIntent());
+        presenter.setTextData();
         supportStartPostponedEnterTransition();
-
-
-        presenter.setPositionOfSwitchButton(movie);
-
+        presenter.setPositionOfSwitchButton();
     }
-//--------- проверка и установка позиции свитча-кнопки
+    //----------------------------SetInfo-----------------
+    @Override
+    public void setTitle(final String title) {
+        tvTitle.setText(title);
+    }
+
+    @Override
+    public void setRelease(final String releaseDate) {
+        tvRelease.setText(releaseDate);
+    }
+
+    @Override
+    public void setVote(final String vote) {
+        tvVote.setText(vote);
+    }
+
+    @Override
+    public void setOverView(final String overView) {
+        tvOverview.setText(overView);
+    }
+
+    @Override
+    public void setGenre(final String genre) {
+        tvGenre.setText(genre);
+    }
+
+    @Override
+    public void setPoster(final String posterPath) {
+        Glide.with(this)
+                .load(posterPath)
+                .placeholder(R.drawable.noimage)
+//                .centerCrop()
+//                .circleCrop() //todo тут попробовать возможности Глайда
+                .into(ivPoster);
+    }
+
+    //--------- проверка и установка позиции свитча-кнопки
     @Override
     public void setSwitch() {
-        aSwitch.setChecked(true);
+        swSaveMovie.setChecked(true);
     }
 
     //------------------------кнопки--------------
     @OnClick(R.id.btn_trailler)
-    public void onButtonTrailler(){
-        //todo как сюда отправить манагер и диалог??
+    public void onButtonTrailler() {
+        FragmentManager manager = getSupportFragmentManager();
+        //-------------------------//todo кликер прям в конструкторе
+        Dialog myDialogFragment = new Dialog(new Dialog.OnTrailerClick() {
+            @Override
+            public void onClickTrailer() {
+                //------------Клик из диалога----------
+                Intent browserIntent = new
+                        Intent(Intent.ACTION_VIEW, Uri.parse(Constans.YOU_TUBE + tvTitle.getText()));
+                startActivity(browserIntent);
+            }
+        });
         myDialogFragment.show(manager, "myDialog");
-
     }
 
-
-
-//------------Клик из диалога----------
-    @Override
-    public void onClickTrailer() {
-        Intent browserIntent = new
-                Intent(Intent.ACTION_VIEW, Uri.parse(Constans.YOU_TUBE + title.getText()));
-        startActivity(browserIntent);
-    }
-//----------------Click Switch------------------
-    @Override
-    public void onClick(View v) {
-        boolean checked = ((Switch) v).isChecked();
-        presenter.saveOrDeleteMovie(checked,movie);
-
-    }
-
-    @Override
-    public void setCheckState(boolean checkState) {
-        //тру или фалс
-        newCheckState = checkState;
+    //----------------Click Switch------------------
+    @OnCheckedChanged(R.id.sw_collection)
+    public void onSwitchClick(boolean isChecked) {
+        presenter.saveOrDeleteMovie(isChecked);
     }
 
     @Override
@@ -133,17 +133,20 @@ public class ItemInfoActivity extends AppCompatActivity implements ItemInfoContr
     public void doToastRemoved() {
         Toast.makeText(ItemInfoActivity.this, "Removed from collection", Toast.LENGTH_SHORT).show();
     }
-//-------------------------------------------------------------------------
 
-    //todo как тут быть????
+    @Override
+    public void finishActivity(Movie movie) {
+        setResult(RESULT_OK, new Intent().putExtra("movie", movie));
+        finish();
+    }
+
+    @Override
+    public void finishActivity() {
+        finish();
+    }
+
     @Override
     public void onBackPressed() {
-        if(newCheckState!=null){
-            if(!newCheckState){
-                setResult(RESULT_OK,new Intent().putExtra("movie",movie));
-
-            }
-        }
-        super.onBackPressed();
+        presenter.onBackPressed();
     }
 }
