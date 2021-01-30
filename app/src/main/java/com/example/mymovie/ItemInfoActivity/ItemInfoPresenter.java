@@ -60,16 +60,6 @@ public class ItemInfoPresenter implements ItemInfoContract.ItemInfoPresenter {
             }
         }
     }
-    //-----------Intent+Switch--------------------
-
-    @Override
-    public void onBackPressed() {
-        if (!newCheckState) {
-            view.finishActivity(movie);
-        } else {
-            view.finishActivity();
-        }
-    }
 
     public List<Integer> readFromDb() {
         SQLiteDatabase sql = dataHelper.getWritableDatabase();

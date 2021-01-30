@@ -14,7 +14,7 @@ public interface CollectionContract {
 
         void populateAdapter(List<Movie> listData);
 
-        void replaceListInAdapter(List<Movie> listData);
+
     }
     interface CollectionPresenter{
 
@@ -25,6 +25,6 @@ public interface CollectionContract {
 
         void createDataBase(DataBase dataBase);
 
-        void replyForActivityResult(int resultCode, int requestCode,int righrRequest);
+
     }
 }

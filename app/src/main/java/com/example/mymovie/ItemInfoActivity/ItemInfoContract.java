@@ -27,9 +27,7 @@ public interface ItemInfoContract {
 
         void setPoster(String posterPath);
 
-        void finishActivity(Movie movie);
 
-        void finishActivity();
     }
 
     interface ItemInfoPresenter {
@@ -44,7 +42,7 @@ public interface ItemInfoContract {
 
         void setTextData();
 
-        void onBackPressed();
+
 
     }
 }

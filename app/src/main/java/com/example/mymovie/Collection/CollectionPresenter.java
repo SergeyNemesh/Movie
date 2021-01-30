@@ -1,10 +1,7 @@
 package com.example.mymovie.Collection;
 
-import android.app.Activity;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.view.View;
 
 import com.example.mymovie.DataBase.DataBase;
 import com.example.mymovie.Dataclasses.Movie;
@@ -18,12 +15,13 @@ import static android.view.View.VISIBLE;
 
 public class CollectionPresenter implements CollectionContract.CollectionPresenter {
 
-    List<Movie> listData = new ArrayList<>();
+    private List<Movie> listData = new ArrayList<>();
     private DataBase dataHelper;
 
     CollectionContract.CollectionView view;
-    CollectionPresenter(CollectionContract.CollectionView view){
-        this.view=view;
+
+    CollectionPresenter(CollectionContract.CollectionView view) {
+        this.view = view;
 
     }
 
@@ -43,6 +41,7 @@ public class CollectionPresenter implements CollectionContract.CollectionPresent
         }
         view.populateAdapter(listData);
     }
+
     private List<Movie> readFromDb() {
         SQLiteDatabase sql = dataHelper.getWritableDatabase();
         List<Movie> list = new ArrayList<>();
@@ -73,30 +72,18 @@ public class CollectionPresenter implements CollectionContract.CollectionPresent
         return list;
 
     }
+
     private void closeDb() {
         dataHelper.close();
     }
-//---------------Удаление-------------------
+
     @Override
     public void deleteMovie(Movie testMovieDelete) {
-
         SQLiteDatabase sql = dataHelper.getWritableDatabase();
         sql.execSQL(DataBase.DEL_NAME + testMovieDelete.getId());
         dataHelper.close();
 
 
-
     }
-    //--------------ActivityResult----------------
 
-    @Override
-    public void replyForActivityResult(int resultCode, int requestCode,int rightRequest) {
-
-        if (resultCode == Activity.RESULT_OK && requestCode == rightRequest){
-            listData.clear();
-            getListItemFromDb();
-            view.replaceListInAdapter(listData);
-        }
-
-    }
 }

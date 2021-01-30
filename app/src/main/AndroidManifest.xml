@@ -11,18 +11,26 @@
         android:roundIcon="@mipmap/ic_launcher_logon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CollectionAdapter.NewCollectionActivity"></activity>
-        <activity android:name=".Splash.SplashActivity">
+
+        <activity android:name=".Splash.SplashActivity"
+            android:screenOrientation = "portrait">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Search.SearchActivity" />
-        <activity android:name=".Collection.CollectionActivity" />
-        <activity android:name=".ItemInfoActivity.ItemInfoActivity" />
-        <activity android:name=".Main.MainActivity"></activity>
+        <activity android:name=".Search.SearchActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Collection.CollectionActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ItemInfoActivity.ItemInfoActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Main.MainActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
     </application>
 
 </manifest>

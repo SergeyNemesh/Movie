@@ -45,14 +45,14 @@
         android:textSize="25dp"
         android:textStyle="bold" />
 
-    <GridView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/gridView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="73dp"
         android:horizontalSpacing="2dp"
         android:numColumns="2"
-        android:padding="3dp"
+
         android:verticalSpacing="2dp" />
 
 

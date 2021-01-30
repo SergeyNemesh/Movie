@@ -1,12 +1,5 @@
 package com.example.mymovie.Main;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityOptionsCompat;
-import androidx.core.view.ViewCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +9,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.view.ViewCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.mymovie.Collection.CollectionActivity;
 import com.example.mymovie.Dataclasses.Movie;
@@ -27,17 +27,13 @@ import com.example.mymovie.Search.SearchActivity;
 import com.example.mymovie.Splash.SplashActivity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.example.mymovie.Pagination.PaginationListener.PAGE_START;
-
-public class MainActivity extends AppCompatActivity implements MainContract.MainView,Adaptor.OnItemClick{
+public class MainActivity extends AppCompatActivity implements MainContract.MainView, Adaptor.OnItemClick {
 
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
@@ -53,10 +49,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
     private Adaptor mAdaptor;
 
 
-
-
-
     MainContract.MainPresenter presenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,10 +75,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
 
             @Override
             public boolean isLoading() {
-                //todo верну ли я тут значение переменной???
                 return presenter.booleanIsLoading();
             }
-            //---------------------------------
+
         });
 //----------------------------свайпРЕфреш-----------------------
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -97,22 +90,19 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
 
             }
         });
-//----------методы--------
         presenter.getGenres();
         presenter.getMovies();
-
     }
 
 
-    //todo методы из getMovies();
     @Override
     public void removeLoadingToAdapter() {
         mAdaptor.removeLoading();
     }
-      //todo отправил лист в адаптор
+
     @Override
     public void addItemsToAdapter(List<Movie> movies) {
-      mAdaptor.addItems(movies);
+        mAdaptor.addItems(movies);
     }
 
     @Override
@@ -125,9 +115,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         mAdaptor.addLoading();
     }
 
-    //----------------------
-
-
     @Override
     public void setToast() {
         Toast.makeText(MainActivity.this, R.string.endOFResults, Toast.LENGTH_SHORT).show();
@@ -138,8 +125,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
     public void onButtonCollection() {
         Intent intentCollection = new Intent(MainActivity.this, CollectionActivity.class);
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this, btn_collection, ViewCompat.getTransitionName(btn_collection));
-
-        startActivity(intentCollection,options.toBundle());
+        startActivity(intentCollection, options.toBundle());
 
     }
 
@@ -147,26 +133,23 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
     public void onButtonSearch() {
         Intent intentSearch = new Intent(MainActivity.this, SearchActivity.class);
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this, buttonSearch, ViewCompat.getTransitionName(buttonSearch));
-
-        startActivity(intentSearch,options.toBundle());
-
+        startActivity(intentSearch, options.toBundle());
     }
 
     @Override
     public void onClick(Movie movie, ImageView poster) {
         Intent intent = new Intent(this, ItemInfoActivity.class);
-        intent.putExtra("movie",movie);
+        intent.putExtra("movie", movie);
         List<Pair<View, String>> listOfViews = new ArrayList<>();
         listOfViews.add(Pair.create((View) poster, "poster"));
         Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(
                 MainActivity.this, listOfViews.toArray(new android.util.Pair[]{})).toBundle();
-        startActivity(intent,bundle);
-
+        startActivity(intent, bundle);
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         linearLayout.setVisibility(View.INVISIBLE);
-
     }
 }

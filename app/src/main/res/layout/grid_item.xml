@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="300dp"
     android:background="@drawable/style_for_grid"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_margin="3dp">
 
 
     <ImageView

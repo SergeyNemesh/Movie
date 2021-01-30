@@ -28,13 +28,12 @@ public class MainPresenter implements MainContract.MainPresenter {
     private int currentPage = PAGE_START;
     private int totalPages = 0;
     private boolean isLoading = false;
-//-----------------------------------------------------
     MainContract.MainView view;
     MainPresenter(MainContract.MainView view) {
         this.view = view;
     }
 //--------------------------------------------------------------------------------
-    //todo получил жанры
+
     @Override
     public void getGenres() {
 
@@ -52,14 +51,13 @@ public class MainPresenter implements MainContract.MainPresenter {
             }
         });
     }
-    //todo записал в МАР
+
     public void getListOfGenres(List<GenresInfo> genres) {
         for (GenresInfo item : genres) {
             mapOfGenres.put(item.getId(), item.getName());
         }
     }
 
-//todo получил фильмы
     @Override
     public void getMovies() {
         Call call = new ApiClient().getAPIService().getTopRatedMoviesPage(Constans.API_KEY, currentPage);
@@ -71,10 +69,9 @@ public class MainPresenter implements MainContract.MainPresenter {
                 totalPages = response.body().getTotal_pages();
 
                 if (currentPage != PAGE_START) view.removeLoadingToAdapter();
-                //todo записал жанры для фильмов
+
                 view.addItemsToAdapter(findGenres(response.body().getResults()));
                 view.setRefreshing(false);
-
 
                 if (currentPage < totalPages) {
                     view.addLoadingToAdapter();
@@ -101,9 +98,6 @@ public class MainPresenter implements MainContract.MainPresenter {
         }
         return listMovies;
     }
-    //---------------------------------------------------------------------
-////---------------------------------------------------
-    //todo ScrollListener Пагинация
 
     @Override
     public void loadMoreItems() {
@@ -121,8 +115,7 @@ public class MainPresenter implements MainContract.MainPresenter {
     public boolean booleanIsLoading() {
         return isLoading;
     }
-//-------------------------------------------------
-      //todo Swiperefresh----------------
+
 
     @Override
     public void setCurrentPage() {

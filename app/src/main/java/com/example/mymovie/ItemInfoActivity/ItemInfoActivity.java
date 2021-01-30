@@ -144,24 +144,4 @@ public class ItemInfoActivity extends AppCompatActivity implements ItemInfoContr
         Toast.makeText(ItemInfoActivity.this, removedFromCollection, Toast.LENGTH_SHORT).show();
     }
 
-
- //---------тут не работает анимация//todo
-    @Override
-    public void onBackPressed() {
-        presenter.onBackPressed();
-
-    }
-    @Override
-    public void finishActivity(Movie movie) {
-        setResult(RESULT_OK, new Intent().putExtra("movie", movie));
-        //todo тут убивает анимацию
-        finish();
-    }
-
-    @Override
-    public void finishActivity() {
-        //todo тут убивает анимацию
-        finish();
-
-    }
 }
