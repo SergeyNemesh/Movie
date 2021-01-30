@@ -8,7 +8,6 @@ import androidx.annotation.Nullable;
 
 public class DataBase extends SQLiteOpenHelper {
 
-
     public static final String TABLE_NAME = "my_collection";
     public static final String MOVIE_ID = "movieid";
     public static final String TITLE = "title";
@@ -29,8 +28,6 @@ public class DataBase extends SQLiteOpenHelper {
     public DataBase(@Nullable Context context) {
         super(context,DB_NAME, null, DB_VERSION);
     }
-
-
 
     @Override
     public void onCreate(SQLiteDatabase db) {

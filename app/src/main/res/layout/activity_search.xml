@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/lineartest"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/green2_background"
+    android:orientation="vertical"
+    tools:context=".Search.SearchActivity">
+
+
+
+
+    <FrameLayout
+        android:layout_marginTop="3dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_collection"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@color/black"
+            android:clickable="true" />
+
+        <Button
+            android:id="@+id/btn_searching"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+
+            android:background="@drawable/ic_action_name"
+            android:transitionName="trans" />
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/search_id"
+
+            android:layout_width="400dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="83dp"
+            android:layout_marginRight="8dp"
+
+            android:layout_weight="0.5"
+            android:paddingLeft="4dp"
+            android:paddingRight="8dp"
+
+            app:queryHint="Add your movie " />
+
+
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        >
+
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshSearch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+
+            >
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewSearch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <TextView
+            android:id="@+id/texthint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="150dp"
+            android:text="Add your movie for search"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="25dp" />
+
+
+    </FrameLayout>
+</LinearLayout>

@@ -1,6 +1,9 @@
 package com.example.mymovie.Collection;
 
+import com.example.mymovie.DataBase.DataBase;
 import com.example.mymovie.Dataclasses.Movie;
+
+import java.util.List;
 
 public interface CollectionContract {
 
@@ -8,6 +11,10 @@ public interface CollectionContract {
     interface CollectionView{
 
         void setTextHintVisibility(int visible);
+
+        void populateAdapter(List<Movie> listData);
+
+        void replaceListInAdapter(List<Movie> listData);
     }
     interface CollectionPresenter{
 
@@ -15,5 +22,9 @@ public interface CollectionContract {
 
 
         void deleteMovie(Movie testMovieDelete);
+
+        void createDataBase(DataBase dataBase);
+
+        void replyForActivityResult(int resultCode, int requestCode,int righrRequest);
     }
 }

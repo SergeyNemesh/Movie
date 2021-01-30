@@ -1,6 +1,8 @@
 package com.example.mymovie.Main;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -15,11 +17,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.mymovie.Collection.CollectionActivity;
 import com.example.mymovie.Dataclasses.Movie;
 import com.example.mymovie.ItemInfoActivity.ItemInfoActivity;
 import com.example.mymovie.MainAdapter.Adaptor;
 import com.example.mymovie.Pagination.PaginationListener;
 import com.example.mymovie.R;
+import com.example.mymovie.Search.SearchActivity;
+import com.example.mymovie.Splash.SplashActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,10 +38,6 @@ import butterknife.OnClick;
 import static com.example.mymovie.Pagination.PaginationListener.PAGE_START;
 
 public class MainActivity extends AppCompatActivity implements MainContract.MainView,Adaptor.OnItemClick{
-
-
-
-
 
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         setContentView(R.layout.activity_main);
         presenter = new MainPresenter(this);
         ButterKnife.bind(this);
+        SplashActivity.first.finish();
 
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -69,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
 
         mAdaptor = new Adaptor(this, this);
         mRecyclerView.setAdapter(mAdaptor);
-
+//------------------------кроллер------------------------
         mRecyclerView.addOnScrollListener(new PaginationListener(layoutManager) {
 
             @Override
@@ -84,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
             }
             //---------------------------------
         });
-
+//----------------------------свайпРЕфреш-----------------------
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -95,9 +97,10 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
 
             }
         });
-
+//----------методы--------
         presenter.getGenres();
         presenter.getMovies();
+
     }
 
 
@@ -133,21 +136,37 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
     //--------------------------------------
     @OnClick(R.id.iv_collection)
     public void onButtonCollection() {
+        Intent intentCollection = new Intent(MainActivity.this, CollectionActivity.class);
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this, btn_collection, ViewCompat.getTransitionName(btn_collection));
 
+        startActivity(intentCollection,options.toBundle());
 
     }
 
     @OnClick(R.id.btn_search)
     public void onButtonSearch() {
+        Intent intentSearch = new Intent(MainActivity.this, SearchActivity.class);
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this, buttonSearch, ViewCompat.getTransitionName(buttonSearch));
 
+        startActivity(intentSearch,options.toBundle());
 
     }
-   //todo клик из Адаптора
+
     @Override
     public void onClick(Movie movie, ImageView poster) {
         Intent intent = new Intent(this, ItemInfoActivity.class);
         intent.putExtra("movie",movie);
-        startActivity(intent);
+        List<Pair<View, String>> listOfViews = new ArrayList<>();
+        listOfViews.add(Pair.create((View) poster, "poster"));
+        Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(
+                MainActivity.this, listOfViews.toArray(new android.util.Pair[]{})).toBundle();
+        startActivity(intent,bundle);
+
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        linearLayout.setVisibility(View.INVISIBLE);
 
     }
 }

@@ -25,6 +25,11 @@ public class ItemInfoPresenter implements ItemInfoContract.ItemInfoPresenter {
     }
 
     @Override
+    public void createDataBase(DataBase dataBase) {
+        dataHelper = dataBase;
+    }
+
+    @Override
     public void processIntent(Intent intent) {
         if (intent != null) {
             movie = intent.getParcelableExtra("movie");
@@ -34,16 +39,6 @@ public class ItemInfoPresenter implements ItemInfoContract.ItemInfoPresenter {
     @Override
     public void setTextData() {
         if (movie != null) {
-//todo оператор
-//            String titel = null;
-//            if(movie.getTitle()==null){
-//                titel="";
-//            }else {
-//                titel=movie.getTitle();
-//            }
-//            view.setTitel(titel);
-
-            //     view.setTitle(movie.getTitle() == null ? "" : movie.getTitle());
             view.setTitle(movie.getTitle() == null ? "" : movie.getTitle());
             view.setRelease(movie.getReleaseDate() == null ? "" : movie.getReleaseDate());
             view.setVote(String.valueOf(movie.getVoteAverage()));
@@ -51,11 +46,6 @@ public class ItemInfoPresenter implements ItemInfoContract.ItemInfoPresenter {
             view.setGenre(movie.getGenres() == null ? "" : movie.getGenres().toString());
             view.setPoster(Constans.URL_FOR_PICTURE + movie.getPosterPath());
         }
-    }
-
-    @Override
-    public void createDataBase(DataBase dataBase) {
-        dataHelper = dataBase;
     }
 
     @Override
@@ -114,7 +104,8 @@ public class ItemInfoPresenter implements ItemInfoContract.ItemInfoPresenter {
             contentValues.put(DataBase.RATE, movie.getVoteAverage());
             contentValues.put(DataBase.GENRES, String.valueOf(movie.getGenres()));
             sql.insert(DataBase.TABLE_NAME, null, contentValues);
-            view.doToastAdded();
+            //todo тост!!
+            //view.doToastAdded();
         } else {
             newCheckState = false;
             sql.execSQL(DataBase.DEL_NAME + movie.getId());

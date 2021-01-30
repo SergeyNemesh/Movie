@@ -1,5 +1,7 @@
 package com.example.mymovie.Collection;
 
+import android.app.Activity;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.view.View;
@@ -16,13 +18,18 @@ import static android.view.View.VISIBLE;
 
 public class CollectionPresenter implements CollectionContract.CollectionPresenter {
 
-//todo как создать базу??
-    DataBase dataHelper;
     List<Movie> listData = new ArrayList<>();
-//----------------------------------
+    private DataBase dataHelper;
+
     CollectionContract.CollectionView view;
     CollectionPresenter(CollectionContract.CollectionView view){
         this.view=view;
+
+    }
+
+    @Override
+    public void createDataBase(DataBase dataBase) {
+        dataHelper = dataBase;
     }
 
     @Override
@@ -30,14 +37,11 @@ public class CollectionPresenter implements CollectionContract.CollectionPresent
         listData.clear();
         listData = readFromDb();
         if (listData.isEmpty()) {
-            //todo
             view.setTextHintVisibility(VISIBLE);
-
         } else {
-            //todo
             view.setTextHintVisibility(INVISIBLE);
-
         }
+        view.populateAdapter(listData);
     }
     private List<Movie> readFromDb() {
         SQLiteDatabase sql = dataHelper.getWritableDatabase();
@@ -81,6 +85,18 @@ public class CollectionPresenter implements CollectionContract.CollectionPresent
         dataHelper.close();
 
 
+
+    }
+    //--------------ActivityResult----------------
+
+    @Override
+    public void replyForActivityResult(int resultCode, int requestCode,int rightRequest) {
+
+        if (resultCode == Activity.RESULT_OK && requestCode == rightRequest){
+            listData.clear();
+            getListItemFromDb();
+            view.replaceListInAdapter(listData);
+        }
 
     }
 }

@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+import com.example.mymovie.Dataclasses.Movie;
 import com.example.mymovie.R;
 
 
@@ -15,9 +16,12 @@ public class DialogCollection extends AppCompatDialogFragment {
 
 
     public OnItemCollectionClickForDelete clickToDelete;
+    //todo тут есть кино файнал
+    private Movie testMovie;
 
-    public DialogCollection(OnItemCollectionClickForDelete clickToDelete) {
-        this.clickToDelete =  clickToDelete;
+    public DialogCollection(OnItemCollectionClickForDelete clickToDelete,final Movie testMovie) {
+                this.clickToDelete =  clickToDelete;
+                this.testMovie = testMovie;
     }
 
     @NonNull
@@ -33,7 +37,7 @@ public class DialogCollection extends AppCompatDialogFragment {
                 })
                 .setPositiveButton("ОК", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        clickToDelete.onClickAskForDelete();
+                        clickToDelete.onClickAskForDelete(testMovie);
                         dialog.cancel();
                     }
                 });
@@ -41,7 +45,7 @@ public class DialogCollection extends AppCompatDialogFragment {
         return builder.create();
     }
     public interface OnItemCollectionClickForDelete {
-         void onClickAskForDelete();
+         void onClickAskForDelete(Movie movie);
     }
 
 }

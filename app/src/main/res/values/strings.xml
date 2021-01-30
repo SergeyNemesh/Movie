@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MDBtest</string>
+    <string name="app_name">MyMovie</string>
     <string name="endOFResults">All results showed</string>
     <string name="emptySearch">Add some movie</string>
     <string name="no_results_by_query">No results for show by %s</string>
@@ -7,4 +7,7 @@
     <string name="vote_rate">\"Rate : %s\"</string>
     <string name="aru_s_to_search">\Are you sure to search</string>
     <string name="ask_to_delete_from_collection">Are you sure to delete movie?</string>
+    <string name="remover_from_collection">Removed from collection</string>
+    <string name="addedToColection">Added to your collection</string>
+    <string name="removedFromCollection">Removed from collection</string>
 </resources>

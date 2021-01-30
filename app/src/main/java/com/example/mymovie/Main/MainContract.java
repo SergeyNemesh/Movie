@@ -24,7 +24,6 @@ public interface MainContract {
 
         void getMovies();
 
-
         void loadMoreItems();
 
         boolean booleanIsLoading();

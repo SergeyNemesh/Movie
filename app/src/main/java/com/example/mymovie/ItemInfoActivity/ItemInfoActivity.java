@@ -24,6 +24,9 @@ import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
+import static com.example.mymovie.R.string.addedToColection;
+import static com.example.mymovie.R.string.removedFromCollection;
+
 public class ItemInfoActivity extends AppCompatActivity implements ItemInfoContract.ItemInfoView {
 
     @BindView(R.id.tv_info_title)
@@ -50,15 +53,25 @@ public class ItemInfoActivity extends AppCompatActivity implements ItemInfoContr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_info);
         ButterKnife.bind(this);
+        //ivPoster.setTransitionName("poster");
         presenter = new ItemInfoPresenter(this);
         presenter.createDataBase(new DataBase(this));
-
+        supportStartPostponedEnterTransition();
 //-----------------------------------------------------------------------
         presenter.processIntent(getIntent());
         presenter.setTextData();
-        supportStartPostponedEnterTransition();
+       //todo тут со старта сдвигаем свич
         presenter.setPositionOfSwitchButton();
+
     }
+
+    //--------- проверка и установка позиции свитча-кнопки
+    @Override
+    public void setSwitch() {
+        //todo пхд тут Кликается свитч
+        swSaveMovie.setChecked(true);
+    }
+
     //----------------------------SetInfo-----------------
     @Override
     public void setTitle(final String title) {
@@ -89,17 +102,14 @@ public class ItemInfoActivity extends AppCompatActivity implements ItemInfoContr
     public void setPoster(final String posterPath) {
         Glide.with(this)
                 .load(posterPath)
-                .placeholder(R.drawable.noimage)
+                //todo не срабатывает плейсхолдер
+                //.placeholder(R.drawable.noimage)
 //                .centerCrop()
-//                .circleCrop() //todo тут попробовать возможности Глайда
+//                .circleCrop()
                 .into(ivPoster);
     }
 
-    //--------- проверка и установка позиции свитча-кнопки
-    @Override
-    public void setSwitch() {
-        swSaveMovie.setChecked(true);
-    }
+
 
     //------------------------кнопки--------------
     @OnClick(R.id.btn_trailler)
@@ -126,27 +136,32 @@ public class ItemInfoActivity extends AppCompatActivity implements ItemInfoContr
 
     @Override
     public void doToastAdded() {
-        Toast.makeText(ItemInfoActivity.this, "Added to your collection", Toast.LENGTH_SHORT).show();
+        Toast.makeText(ItemInfoActivity.this, addedToColection, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void doToastRemoved() {
-        Toast.makeText(ItemInfoActivity.this, "Removed from collection", Toast.LENGTH_SHORT).show();
+        Toast.makeText(ItemInfoActivity.this, removedFromCollection, Toast.LENGTH_SHORT).show();
     }
 
+
+ //---------тут не работает анимация//todo
+    @Override
+    public void onBackPressed() {
+        presenter.onBackPressed();
+
+    }
     @Override
     public void finishActivity(Movie movie) {
         setResult(RESULT_OK, new Intent().putExtra("movie", movie));
+        //todo тут убивает анимацию
         finish();
     }
 
     @Override
     public void finishActivity() {
+        //todo тут убивает анимацию
         finish();
-    }
 
-    @Override
-    public void onBackPressed() {
-        presenter.onBackPressed();
     }
 }

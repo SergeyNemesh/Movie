@@ -2,9 +2,7 @@ package com.example.mymovie.Collection;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,16 +10,23 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.mymovie.Collection.DialogCollection.DialogCollection;
 import com.example.mymovie.CollectionAdapter.CollectionAdapter;
+import com.example.mymovie.DataBase.DataBase;
 import com.example.mymovie.Dataclasses.Movie;
 import com.example.mymovie.ItemInfoActivity.ItemInfoActivity;
 import com.example.mymovie.R;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.example.mymovie.R.string.remover_from_collection;
 
 public class CollectionActivity extends AppCompatActivity implements CollectionContract.CollectionView, CollectionAdapter.CollectionListener, DialogCollection.OnItemCollectionClickForDelete {
     @BindView(R.id.gridView)
@@ -31,12 +36,9 @@ public class CollectionActivity extends AppCompatActivity implements CollectionC
     @BindView(R.id.textIsEmpty)
     TextView textHintIsEmpty;
 
-    CollectionAdapter adapter;
-
+    private CollectionAdapter adapter;
     private final static int REQUEST_CODE_REMOVE_ITEM = 1000;
-
-    Movie testMovieDelete;
-
+    //Movie testMovieDelete;
 
     //---------------------------------------------
     CollectionContract.CollectionPresenter presenter;
@@ -47,74 +49,58 @@ public class CollectionActivity extends AppCompatActivity implements CollectionC
         setContentView(R.layout.activity_collection);
         ButterKnife.bind(this);
         presenter = new CollectionPresenter(this);
-
-
+        presenter.createDataBase(new DataBase(this));
         presenter.getListItemFromDb();
-
-        //todo хранить в Активити лист?? или нельзя
-
-//        adapter = new CollectionAdapter(CollectionActivity.this, listData, this);
-//        grid.setAdapter(adapter);
-
-
-        //todo сюда вернуть Лист?
-
     }
+    //----------------PopulateAdapter----------------------
 
+    @Override
+    public void populateAdapter(List<Movie> listData) {
+        adapter = new CollectionAdapter(CollectionActivity.this, listData, this);
+        grid.setAdapter(adapter);
+    }
     //----------------выводим сообщение -------
     @Override
     public void setTextHintVisibility(int visible) {
-        //todo ьудет ли тут разные значения
-        textHintIsEmpty.setVisibility(visible);
-
+      textHintIsEmpty.setVisibility(visible);
     }
-
     //-----------------------клик из адаптора------------------
 
     @Override
     public void onClickCollection(Movie movie, ImageView poster) {
         Intent intent = new Intent(CollectionActivity.this, ItemInfoActivity.class);
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(CollectionActivity.this, poster, ViewCompat.getTransitionName(poster));
         intent.putExtra("movie", movie);
-        startActivityForResult(intent, REQUEST_CODE_REMOVE_ITEM);
+        startActivityForResult(intent, REQUEST_CODE_REMOVE_ITEM,options.toBundle());
     }
-//------------------------клик из адаптера ДЛИННЫЙ
+
+    //------------------------клик из адаптера ДЛИННЫЙ
     @Override
     public void onLongDeleteItem(Movie movie) {
+        //todo тут я слил Диалогу кино!!!!
         FragmentManager manager = getSupportFragmentManager();
-        DialogCollection ddd = new DialogCollection(this);
+        DialogCollection ddd = new DialogCollection(this,movie);
         ddd.show(manager, "myDialog");
-        testMovieDelete = movie;
     }
-//-------------------------------Клик из Аллерт Диалог------
+
+    //-------------------------------Клик из Аллерт Диалог------
     @Override
-    public void onClickAskForDelete() {
-
-        presenter.deleteMovie(testMovieDelete);
-
-        Toast.makeText(CollectionActivity.this, "Removed from collection", Toast.LENGTH_SHORT).show();
-        adapter.removeItem(testMovieDelete);
-
-        //presenter.readFromDb();
-        //todo какой выбрать?
+    public void onClickAskForDelete(Movie movie) {
+        presenter.deleteMovie(movie);
+        Toast.makeText(CollectionActivity.this, remover_from_collection, Toast.LENGTH_SHORT).show();
+        adapter.removeItem(movie);
         presenter.getListItemFromDb();
-
-
-        //todo походу отпало
-//        if (listData.isEmpty()) {
-//            textHintIsEmpty.setVisibility(View.VISIBLE);
-//        } else {
-//            textHintIsEmpty.setVisibility(View.INVISIBLE);
-//        }
-
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //todo как тут поступить??
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_REMOVE_ITEM) {
-            listData.clear();
-            getListItemFromDb();
-            adapter.replaseData(listData);
-        }
+        presenter.replyForActivityResult(resultCode,requestCode,REQUEST_CODE_REMOVE_ITEM);
+
+    }
+
+    @Override
+    public void replaceListInAdapter(List<Movie> listData) {
+        adapter.replaseData(listData);
     }
 }

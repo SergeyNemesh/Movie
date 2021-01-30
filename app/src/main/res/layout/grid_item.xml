@@ -13,7 +13,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:background="@drawable/noimage"
-        android:transitionName="xxx" />
+        android:transitionName="poster" />
 
     <TextView
         android:id="@+id/gv_title"

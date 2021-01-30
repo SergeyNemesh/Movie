@@ -13,7 +13,6 @@ import com.example.mymovie.Dataclasses.Constans;
 import com.example.mymovie.Dataclasses.Movie;
 import com.example.mymovie.R;
 
-
 import java.util.List;
 
 public class CollectionAdapter extends BaseAdapter {
@@ -63,12 +62,12 @@ public class CollectionAdapter extends BaseAdapter {
         String posterPath = movie.getPosterPath();
         String s = Constans.URL_FOR_PICTURE + posterPath;
         Glide.with(context).load(s).into(poster);
-         convertView.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
-                 clickListener.onClickCollection(movie,poster);
-             }
-         });
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickListener.onClickCollection(movie, poster);
+            }
+        });
         convertView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -80,28 +79,19 @@ public class CollectionAdapter extends BaseAdapter {
     }
 
     public interface CollectionListener {
-        void onClickCollection(Movie movie,ImageView poster);
+        void onClickCollection(Movie movie, ImageView poster);
         void onLongDeleteItem(Movie movie);
-
-
     }
 
     public void removeItem(Movie movie) {
-
-            listData.remove(movie);
-            notifyDataSetChanged();
-
-
-    }public void replaseData(List<Movie> movies) {
-            listData.clear();
-            listData.addAll(movies);
-            notifyDataSetChanged();
-
-
+        listData.remove(movie);
+        notifyDataSetChanged();
     }
 
-
-
-
+    public void replaseData(List<Movie> movies) {
+        listData.clear();
+        listData.addAll(movies);
+        notifyDataSetChanged();
+    }
 
 }
