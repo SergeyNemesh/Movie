@@ -42,11 +42,6 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
 
     private Adaptor mAdaptor;
 
-    //todo почему не работает ButterKnife
-    //    @BindView(R.id.btn_search)
-//     Button button;
-    Button button;
-
     SearchContract.SearchPresenter presenter;
     @SuppressLint("ResourceAsColor")
     @Override
@@ -55,10 +50,6 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
         presenter = new SearchPresenter(this);
-
-        //todo почему не работает ButterKnife
-        button = findViewById(R.id.btn_search);
-
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recycler.setLayoutManager(layoutManager);
@@ -70,7 +61,6 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
         searchView.setIconified(false);
         searchView.setBackgroundColor(R.color.black);
 
-
         swipeRefreshSearch.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -78,8 +68,6 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
                 mAdaptor.clear();
                 swipeRefreshSearch.setRefreshing(true);
                 presenter.startSearchingMovie(searchView.getQuery().toString());
-
-
             }
         });
 
@@ -95,7 +83,6 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
 
                 return presenter.booleanIsLoading();
             }
-            //---------------------------------
         });
 
           presenter.getGenres();
@@ -121,7 +108,6 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
     @Override
     public void doToastNoResultsFromSearch(String requestMovie) {
         Toast.makeText(SearchActivity.this, getString(R.string.no_results_by_query,requestMovie), Toast.LENGTH_SHORT).show();
-
     }
 
     @Override
@@ -143,7 +129,6 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
     public boolean onQueryTextChange(String newText) {
         return false;
     }
-    //---------------------------------------
 
 //-------------------Click From Adaptor--------
     @Override
@@ -151,7 +136,6 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
         Intent intent = new Intent(this, ItemInfoActivity.class);
         intent.putExtra("movie",movie);
         startActivity(intent);
-
     }
    //-------------------Scroller-------------------------
 

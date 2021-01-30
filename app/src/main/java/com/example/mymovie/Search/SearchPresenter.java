@@ -28,15 +28,13 @@ public class SearchPresenter implements SearchContract.SearchPresenter {
     private int totalPages = 0;
     private boolean isLoading = false;
 
-
-
     SearchContract.SearchView view;
     SearchPresenter(SearchContract.SearchView view) {
         this.view = view;
     }
 
 
-    //todo Swiperefresh----------------
+
     @Override
     public void setCurrentPage() {
         currentPage = PAGE_START;
