@@ -30,7 +30,7 @@
             android:layout_height="70dp"
             android:layout_marginLeft="290dp"
             android:transitionName="tranzzz"
-            app:srcCompat="@drawable/ic_action_book"
+            app:srcCompat="@drawable/ic_action_pack"
             />
     </LinearLayout>
 

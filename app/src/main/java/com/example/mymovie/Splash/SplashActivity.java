@@ -22,13 +22,9 @@ import butterknife.ButterKnife;
 
 public class SplashActivity extends AppCompatActivity {
     @BindView(R.id.textView)
-    TextView t4;
+     TextView t1;
     @BindView(R.id.textView2)
-    TextView t3;
-    @BindView(R.id.textView3)
-    TextView t2;
-    @BindView(R.id.textView4)
-    TextView t1;
+    TextView text;
     public static SplashActivity first;
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -37,89 +33,26 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
-        first = this;
-        t1.setTransitionVisibility(View.INVISIBLE);
-        t2.setTransitionVisibility(View.INVISIBLE);
-        t3.setTransitionVisibility(View.INVISIBLE);
-        t3.setTransitionVisibility(View.INVISIBLE);
-        t4.setTransitionVisibility(View.INVISIBLE);
-
+       first = this;
+        //t1.setTransitionVisibility(View.INVISIBLE);
+        //text.setTransitionVisibility(View.INVISIBLE);
 
         Animation a1up = AnimationUtils.loadAnimation(SplashActivity.this, R.anim.anim1up);
         t1.startAnimation(a1up);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Animation a1down = AnimationUtils.loadAnimation(SplashActivity.this, R.anim.anim1down);
-                t1.startAnimation(a1down);
-
-            }
-        }, 1500);
-//----------------------------------------------------------------------------
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Animation a2up = AnimationUtils.loadAnimation(SplashActivity.this, R.anim.anim1up);
-                t2.startAnimation(a2up);
-
-            }
-        }, 1000);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Animation a2down = AnimationUtils.loadAnimation(SplashActivity.this, R.anim.anim1down);
-                t2.startAnimation(a2down);
-
-            }
-        }, 2500);
-        //--------------------------------------------------------------------------------
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Animation a3up = AnimationUtils.loadAnimation(SplashActivity.this, R.anim.anim1up);
-                t3.startAnimation(a3up);
-
-            }
-        }, 2000);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Animation a3down = AnimationUtils.loadAnimation(SplashActivity.this, R.anim.anim1down);
-                t3.startAnimation(a3down);
-
-            }
-        }, 3500);
-//-------------------------------------------------------------------------
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Animation a4up = AnimationUtils.loadAnimation(SplashActivity.this, R.anim.anim1up);
-                t4.startAnimation(a4up);
-
-            }
-        }, 3000);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Animation a4down = AnimationUtils.loadAnimation(SplashActivity.this, R.anim.anim1down);
-                t4.startAnimation(a4down);
-
-            }
-        }, 4500);
+        Animation textanim = AnimationUtils.loadAnimation(SplashActivity.this, R.anim.animtext);
+        text.startAnimation(textanim);
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(SplashActivity.this, t4, ViewCompat.getTransitionName(t4));
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(SplashActivity.this, t1, ViewCompat.getTransitionName(t1));
                 startActivity(intent, options.toBundle());
-
+                t1.setClickable(true);
             }
-        }, 4500);
+        }, 2299);
+
+
 
     }
 }

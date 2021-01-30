@@ -8,39 +8,23 @@
     tools:context=".Splash.SplashActivity"
     android:background="@color/black">
 
-
     <TextView
 
         android:id="@+id/textView"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:background="@drawable/ic_action_collection"
+        android:background="@drawable/ic_action_first"
         android:textSize="35dp"
         android:transitionName="logotrans"/>
 
     <TextView
-        android:layout_marginTop="15dp"
+        android:textStyle="bold"
+        android:textColor="@color/mycolor"
+        android:textSize="30dp"
+        android:gravity="center"
         android:id="@+id/textView2"
-        android:background="@drawable/ic_action_collection"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:textSize="35dp" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:background="@drawable/ic_action_collection"
-android:layout_marginTop="15dp"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:textSize="35dp" />
-
-    <TextView
-        android:layout_marginTop="15dp"
-        android:id="@+id/textView4"
-        android:background="@drawable/ic_action_collection"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:textSize="35dp" />
-
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="MyMovie" />
 
 </LinearLayout>

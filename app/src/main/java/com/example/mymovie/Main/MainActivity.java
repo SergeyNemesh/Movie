@@ -3,6 +3,7 @@ package com.example.mymovie.Main;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
@@ -57,7 +58,13 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         setContentView(R.layout.activity_main);
         presenter = new MainPresenter(this);
         ButterKnife.bind(this);
-        SplashActivity.first.finish();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                SplashActivity.first.finish();
+            }
+        }, 500);
 
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -92,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         });
         presenter.getGenres();
         presenter.getMovies();
+
     }
 
 
