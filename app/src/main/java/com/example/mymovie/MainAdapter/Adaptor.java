@@ -142,8 +142,14 @@ public class Adaptor extends RecyclerView.Adapter<BaseViewHolder> {
             release.setText("Release at " + movie.getReleaseDate());
             vote.setText("Rate : " + String.valueOf(movie.getVoteAverage()));
             overview.setText(movie.getOverview());
-            genres.setText(movie.getGenres().toString());
-            Glide.with(context).load(Constans.URL_FOR_PICTURE + movie.getPosterPath()).into(poster);
+            String genresString = movie.getGenres().toString();
+
+            genres.setText(genresString.substring(1,genresString.length()-1));
+
+            Glide.with(context)
+                    .load(Constans.URL_FOR_PICTURE + movie.getPosterPath())
+                    .placeholder(R.drawable.noimage)
+                    .into(poster);
 
         }
 

@@ -102,8 +102,8 @@ public class ItemInfoActivity extends AppCompatActivity implements ItemInfoContr
     public void setPoster(final String posterPath) {
         Glide.with(this)
                 .load(posterPath)
-                //todo не срабатывает плейсхолдер
-                //.placeholder(R.drawable.noimage)
+
+                .placeholder(R.drawable.noimage)
 //                .centerCrop()
 //                .circleCrop()
                 .into(ivPoster);
@@ -130,8 +130,10 @@ public class ItemInfoActivity extends AppCompatActivity implements ItemInfoContr
 
     //----------------Click Switch------------------
     @OnCheckedChanged(R.id.sw_collection)
-    public void onSwitchClick(boolean isChecked) {
-        presenter.saveOrDeleteMovie(isChecked);
+    public void onSwitchClick(boolean isChecked/*,Boolean isFromUser*/) {
+       // if(isFromUser!=null) {
+            presenter.saveOrDeleteMovie(isChecked);
+        //}
     }
 
     @Override

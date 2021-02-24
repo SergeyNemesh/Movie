@@ -80,7 +80,6 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
 
             @Override
             public boolean isLoading() {
-
                 return presenter.booleanIsLoading();
             }
         });
